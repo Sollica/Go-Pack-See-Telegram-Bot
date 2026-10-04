@@ -1,0 +1,18 @@
+[project]
+name = "go-pack-see-telegram-bot"
+version = "0.1.0"
+description = "Telegram bot for Go-Pack-See"
+readme = "README.md"
+authors = [
+    { name = "Alexey Pisanenko", email = "pisanenko.alexey@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "aiogram>=3.31.0",
+]
+
+[tool.uv]
+package = false
+
+[project.scripts]
+start-bot = "main:main"
