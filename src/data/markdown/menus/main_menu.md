@@ -1,0 +1,2 @@
+![Map for main menu](https://img.magnific.com/premium-photo/bangkok-thailand-october-7-2021-russia-flag-world-map-background_39768-5246.jpg?semt=ais_hybrid&w=740&q=80)
+Выберите регион, который вы хотите изучить.

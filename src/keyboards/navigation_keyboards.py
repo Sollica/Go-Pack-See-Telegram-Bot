@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from data.load_data import load_data
 
-BOT_MESSAGES = load_data("data/bot_messages.json")
+TOURS = load_data("data/tours.json")
 
 main_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Москва", callback_data="moscow")]
@@ -20,7 +20,7 @@ def back_keyboard(region: str | None):
 ])
 
 def tours_keyboard(region: str | None):
-    kb = [[InlineKeyboardButton(text=name, callback_data=name)] for name in BOT_MESSAGES["tours"][region]]
+    kb = [[InlineKeyboardButton(text=tour_name, callback_data=f"{region}:{tour}")] for tour_name, tour in TOURS[region]]
     return InlineKeyboardMarkup(inline_keyboard=kb + [
     [InlineKeyboardButton(text="Назад", callback_data=f"{region}:back")]
 ])
