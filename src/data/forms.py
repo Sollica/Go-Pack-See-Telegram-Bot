@@ -5,3 +5,4 @@ class Form(StatesGroup):
     main_menu = State()
     region_menu = State()
     tour_menu = State()
+    tour_preview = State()

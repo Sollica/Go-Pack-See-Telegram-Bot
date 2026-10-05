@@ -1,4 +1,3 @@
-import aiofiles
 from aiogram import F, Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
@@ -6,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import InputRichMessage
 
 from data.forms import Form
+from data.load_data import GetMarkdown
 from keyboards.navigation_keyboards import main_menu_keyboard, region_keyboard
 
 router = Router()
@@ -17,23 +17,17 @@ async def start(message: types.Message, state: FSMContext):
 
 @router.message(Command("main_menu"))
 async def main_menu(message: types.Message, state: FSMContext):
-    async with aiofiles.open("data/markdown/menus/main_menu.md") as f:
-        markdown_content = await f.read()
-    await message.answer_rich(InputRichMessage(markdown=markdown_content), reply_markup=main_menu_keyboard)
+    await message.answer_rich(InputRichMessage(markdown=await GetMarkdown.menu_markdown("main")), reply_markup=main_menu_keyboard)
     await state.set_state(Form.main_menu)
 
 @router.callback_query(F.data == "main_menu")
 async def main_menu_query(callback_query: types.CallbackQuery, state: FSMContext):
-    async with aiofiles.open("data/markdown/menus/main_menu.md") as f:
-        markdown_content = await f.read()
-    await callback_query.message.edit_text(rich_message=InputRichMessage(markdown=markdown_content), reply_markup=main_menu_keyboard)
+    await callback_query.message.edit_text(rich_message=InputRichMessage(markdown=await GetMarkdown.menu_markdown("main")), reply_markup=main_menu_keyboard)
     await state.set_state(Form.main_menu)
 
 @router.callback_query(Form.main_menu)
 async def choose_region(callback_query: types.CallbackQuery, state: FSMContext):
-    async with aiofiles.open(f"data/markdown/menus/main_{callback_query.data}.md") as f:
-        markdown_content = await f.read()
-    await callback_query.message.edit_text(rich_message=InputRichMessage(markdown=markdown_content),
+    await callback_query.message.edit_text(rich_message=InputRichMessage(markdown=await GetMarkdown.menu_markdown(callback_query.data)),
         reply_markup=region_keyboard(callback_query.data)
     )
     await state.set_state(Form.region_menu)

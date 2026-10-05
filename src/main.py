@@ -25,7 +25,7 @@ async def main():
 
     print(
         "==============\n"
-        "BOT IS WORKING\n"
+        "BOT IS RUNNING\n"
         "=============="
     )
 
