@@ -2,10 +2,19 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from data.load_data import load_data
 
-TOURS = load_data("data/tours.json")
+TOURS = load_data("data/jsons/tours.json")
 
 main_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Москва", callback_data="moscow")]
+])
+
+cancel_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
+])
+
+skip_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Пропустить", callback_data="skip")],
+    [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
 ])
 
 def region_keyboard(region: str | None):

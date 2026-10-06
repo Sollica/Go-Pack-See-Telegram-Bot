@@ -4,7 +4,7 @@ import os
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
-from handlers import main_menu_handlers, region_menu_handlers
+from handlers import command_handlers, menu_handlers, region_menu_handlers
 
 load_dotenv()
 token = os.getenv("BOT_TOKEN")
@@ -15,8 +15,9 @@ bot = Bot(token=token)
 dp = Dispatcher()
 
 routers = [
-    main_menu_handlers.router,
-    region_menu_handlers.router
+    menu_handlers.router,
+    region_menu_handlers.router,
+    command_handlers.router
 ]
 
 async def main():
