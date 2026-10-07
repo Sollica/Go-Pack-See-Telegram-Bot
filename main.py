@@ -5,7 +5,7 @@ import os
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
-from handlers import command_handlers, errors, navigation
+from handlers import command_handlers, error_handlers, navigation_handlers
 from middlewares import AnswerCallbackMiddleware
 
 logger = logging.getLogger(__name__)
@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 
 def build_dispatcher() -> Dispatcher:
     dp = Dispatcher()
-    dp.callback_query.outer_middleware(AnswerCallbackMiddleware())
+    dp.callback_query.middleware(AnswerCallbackMiddleware())
     for router in (
-        errors.router,
-        navigation.router,
+        error_handlers.router,
+        navigation_handlers.router,
         command_handlers.router,
     ):
         dp.include_router(router)
