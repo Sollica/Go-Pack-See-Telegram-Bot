@@ -15,4 +15,5 @@ class Nav(CallbackData, prefix="nav"):
     action: Action
     region: str | None = None
     tour: str | None = None
+    page: int | None = None
 

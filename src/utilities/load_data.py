@@ -23,6 +23,7 @@ class UnknownResourceError(LookupError):
 class Tour:
     title: str
     slug: str
+    pages: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,7 +58,7 @@ def get_regions() -> dict[str, Region]:
         tours = []
         for tour in region_data["tours"]:
             check_slug(tour["slug"])
-            tours.append(Tour(title=tour["title"], slug=tour["slug"]))
+            tours.append(Tour(title=tour["title"], slug=tour["slug"], pages=tour["pages"]))
         regions[region_slug] = Region(region_data["title"], region_slug, tuple(tours))
     return regions
 
@@ -91,7 +92,7 @@ async def get_markdown(menu_type: MarkdownType, menu_name: str | None) -> str:
         case MarkdownType.MENU:
             return await read_markdown("menus", f"{menu_name}_menu.md")
         case MarkdownType.TOUR:
-            return await read_markdown("tours", f"{menu_name}_tour.md")
+            return await read_markdown("tours", f"{menu_name}.md")
         case MarkdownType.ABOUT_REGION:
             return await read_markdown("about_region", f"about_{menu_name}.md")
         case _:

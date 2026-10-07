@@ -4,6 +4,7 @@ from contextlib import suppress
 from typing import Any
 
 from aiogram import BaseMiddleware
+from aiogram.dispatcher.flags import get_flag
 from aiogram.exceptions import TelegramAPIError
 from aiogram.types import CallbackQuery, TelegramObject
 
@@ -17,7 +18,7 @@ class AnswerCallbackMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        if isinstance(event, CallbackQuery):
+        if isinstance(event, CallbackQuery) and not get_flag(data, "manual_answer"):
             with suppress(TelegramAPIError):
                 await event.answer()
         return await handler(event, data)
