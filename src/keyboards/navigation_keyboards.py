@@ -1,12 +1,18 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from data.load_data import load_data
+from data.callbacks import Action, Nav
+from utilities.load_data import get_region, get_regions, get_tour
 
-TOURS = load_data("data/jsons/tours.json")
 
-main_menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Москва", callback_data="moscow")]
-])
+def button(text: str, nav: Nav) -> InlineKeyboardButton:
+    return InlineKeyboardButton(text=text, callback_data=nav.pack())
+
+
+def main_menu_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [button(region.title, Nav(action=Action.REGION, region=region.slug))]
+        for region in get_regions().values()
+    ])
 
 cancel_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
@@ -17,19 +23,50 @@ skip_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
 ])
 
-def region_keyboard(region: str | None):
-    return InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Маршруты", callback_data=f"{region}:tours"), InlineKeyboardButton(text="О регионе", callback_data=f"{region}:about")],
-    [InlineKeyboardButton(text="Главное меню", callback_data="main_menu")]
-])
 
-def back_keyboard(region: str | None):
+def region_keyboard(region: str | None) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Назад", callback_data=f"{region}:back")]
-])
+        [
+            button("Маршруты", Nav(action=Action.TOURS, region=region)),
+            button("О регионе", Nav(action=Action.ABOUT, region=region)),
+        ],
+        [button("Главное меню", Nav(action=Action.MAIN))],
+    ])
 
-def tours_keyboard(region: str | None):
-    kb = [[InlineKeyboardButton(text=tour_name, callback_data=f"{region}:{tour}")] for tour_name, tour in TOURS[region]]
-    return InlineKeyboardMarkup(inline_keyboard=kb + [
-    [InlineKeyboardButton(text="Назад", callback_data=f"{region}:back")]
-])
+
+def back_to_region_keyboard(region: str | None) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [button("Назад", Nav(action=Action.REGION, region=region))]
+    ])
+
+
+def tours_keyboard(region_slug: str | None) -> InlineKeyboardMarkup:
+    region = get_region(region_slug)
+    kb = [
+        [button(tour.title, Nav(action=Action.TOUR, region=region.slug, tour=tour.slug))]
+                for tour in region.tours
+    ]
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            *kb,
+            [button("Назад", Nav(action=Action.REGION, region=region.slug))],
+        ]
+    )
+
+def tour_pages_keyboard(
+        region_slug: str | None,
+        tour_slug: str | None,
+        page: int) -> InlineKeyboardMarkup:
+    region = get_region(region_slug)
+    tour = get_tour(region_slug, tour_slug)
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                button("⏪️", Nav(action=Action.TOUR, region=region.slug, tour=tour_slug, page=1)),
+                button("⬅️", Nav(action=Action.TOUR, region=region.slug, tour=tour_slug, page=page - 1)),
+                button("➡️️", Nav(action=Action.TOUR, region=region.slug, tour=tour_slug, page=page + 1)),
+                button("⏩", Nav(action=Action.TOUR, region=region.slug, tour=tour_slug, page=tour.pages))
+            ],
+            [button("К маршрутам", Nav(action=Action.TOURS, region=region.slug))],
+        ]
+    )
