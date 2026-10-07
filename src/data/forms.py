@@ -8,3 +8,4 @@ class Form(StatesGroup):
     tour_preview = State()
     suggest_region_name = State()
     suggest_tour = State()
+    bug_report = State()

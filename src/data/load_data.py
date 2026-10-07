@@ -5,32 +5,32 @@ import aiofiles
 
 
 def load_data(path: str):
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 def put_data(data: dict, path: str):
     if not os.path.exists(path) or os.stat(path).st_size == 0:
-        with open(path, "w") as file:
+        with open(path, "w", encoding="utf-8") as file:
             json.dump([], file)
-    with open(path, "r") as file:
+    with open(path, "r", encoding="utf-8") as file:
         file_data = json.load(file)
     file_data.append(data)
-    with open(path, "w") as file:
+    with open(path, "w", encoding="utf-8") as file:
         json.dump(file_data, file, indent=4, ensure_ascii=False)
     
 
 class GetMarkdown:
     @staticmethod
     async def menu_markdown(menu: str | None) -> str:
-        async with aiofiles.open(f"data/markdown/menus/{menu}_menu.md") as f:
+        async with aiofiles.open(f"data/markdown/menus/{menu}_menu.md", encoding="utf-8") as f:
             return await f.read()
 
     @staticmethod
     async def tour_markdown(tour: str | None) -> str:
-        async with aiofiles.open(f"data/markdown/tours/{tour}_tour.md") as f:
+        async with aiofiles.open(f"data/markdown/tours/{tour}_tour.md", encoding="utf-8") as f:
             return await f.read()
 
     @staticmethod
     async def about_region_markdown(region: str | None) -> str:
-        async with aiofiles.open(f"data/markdown/about_region/about_{region}.md") as f:
+        async with aiofiles.open(f"data/markdown/about_region/about_{region}.md", encoding="utf-8") as f:
             return await f.read()

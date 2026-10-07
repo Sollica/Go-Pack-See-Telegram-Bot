@@ -70,3 +70,32 @@ async def suggest_tour(event: Message | CallbackQuery, state: FSMContext):
         json_data = {"user_id": event.from_user.id, "region_name": region, "tour": tour if tour else None}
         put_data(json_data, "data/jsons/suggestions.json")
     await state.clear()
+
+@router.message(Command("bug_report"))
+async def bug_report_start(message: types.Message, state: FSMContext):
+    await message.answer(
+        (
+            "Столкнулись с ошибкой в работе бота?\n\n"
+            "Пожалуйста, опишите проблему, с которой вы столкнулись, "
+            "и мы постараемся её исправить!"
+        ),
+        reply_markup=cancel_keyboard,
+    )
+    await state.set_state(Form.bug_report)
+
+
+@router.message(Form.bug_report)
+@router.callback_query(Form.bug_report)
+async def process_bug_report(event: Message | CallbackQuery, state: FSMContext):
+    if isinstance(event, CallbackQuery):
+        await event.message.edit_text("Отправка отчёта об ошибке отменена.")
+    else:
+        json_data = {
+            "user_id": event.from_user.id,
+            "username": event.from_user.username,
+            "bug_description": event.text,
+        }
+        put_data(json_data, "data/jsons/bug_reports.json")
+        await event.answer("Спасибо за информацию! Мы уже работаем над исправлением.")
+
+    await state.clear()
