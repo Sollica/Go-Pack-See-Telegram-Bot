@@ -77,12 +77,18 @@ def get_tour(region_slug: str | None, tour_slug: str | None) -> Tour:
     raise UnknownResourceError(f"Unknown tour {tour_slug!r} in region {region_slug!r}")
 
 
+def add_back_to_top_link(markdown: str, threshold: int) -> str:
+    if len(markdown) > threshold:
+        return '<a name="page-top"></a>\n' + markdown + "\n<br><br>[Вернуться наверх](#page-top)"
+    return markdown
+
+
 async def read_markdown(folder: str, filename: str) -> str:
     base = (MARKDOWN_DIR / folder).resolve()
     path = (base / filename).resolve()
     try:
         async with aiofiles.open(path, encoding="utf-8") as f:
-            return await f.read()
+            return add_back_to_top_link(await f.read(), 700)
     except FileNotFoundError as exc:
         raise UnknownResourceError(f"Markdown file not found: {path.name}") from exc
 
