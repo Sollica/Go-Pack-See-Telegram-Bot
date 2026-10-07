@@ -1,0 +1,8 @@
+{
+  "moscow": {
+    "title": "Москва",
+    "tours": [
+      {"title": "Проверка", "slug": "test"}
+    ]
+  }
+}

@@ -5,12 +5,13 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InputRichMessage, Message
 
 from data.forms import Form
-from data.load_data import GetMarkdown, put_data
 from keyboards.navigation_keyboards import (
     cancel_keyboard,
     main_menu_keyboard,
     skip_keyboard,
 )
+from utilities.load_data import MarkdownType, get_markdown
+from utilities.save_data import save_suggestion
 
 router = Router()
 
@@ -25,8 +26,11 @@ async def start(message: types.Message, state: FSMContext):
 
 @router.message(Command("main_menu"))
 async def main_menu(message: types.Message, state: FSMContext):
-    await message.answer_rich(InputRichMessage(markdown=await GetMarkdown.menu_markdown("main")), reply_markup=main_menu_keyboard)
-    await state.set_state(Form.main_menu)
+    await state.clear()
+    await message.answer_rich(
+        InputRichMessage(markdown=await get_markdown(MarkdownType.MENU, "main")),
+        reply_markup=main_menu_keyboard(),
+    )
 
 @router.message(Command("suggest"))
 async def suggest(message: types.Message, state: FSMContext):
@@ -66,7 +70,9 @@ async def suggest_tour(event: Message | CallbackQuery, state: FSMContext):
         await event.answer("Запрос на добавление региона сохранён.")
     if tour is not None:
         data = await state.get_data()
-        region = data.get("suggested_region_name")
-        json_data = {"user_id": event.from_user.id, "region_name": region, "tour": tour if tour else None}
-        put_data(json_data, "data/jsons/suggestions.json")
+        await save_suggestion(
+            user_id=event.from_user.id,
+            region_name=data.get("suggested_region_name"),
+            tour=tour,
+        )
     await state.clear()
