@@ -24,6 +24,7 @@ class Tour:
     title: str
     slug: str
     pages: int
+    map_links: dict[int, str]
 
 
 @dataclass(frozen=True, slots=True)
@@ -58,7 +59,12 @@ def get_regions() -> dict[str, Region]:
         tours = []
         for tour in region_data["tours"]:
             check_slug(tour["slug"])
-            tours.append(Tour(title=tour["title"], slug=tour["slug"], pages=tour["pages"]))
+            map_links = {int(key): link for key, link in tour["map_links"].items()}
+            tours.append(Tour(
+                title=tour["title"],
+                slug=tour["slug"],
+                pages=tour["pages"],
+                map_links=map_links))
         regions[region_slug] = Region(region_data["title"], region_slug, tuple(tours))
     return regions
 
@@ -77,9 +83,14 @@ def get_tour(region_slug: str | None, tour_slug: str | None) -> Tour:
     raise UnknownResourceError(f"Unknown tour {tour_slug!r} in region {region_slug!r}")
 
 
+def get_tour_page_link(region_slug: str | None, tour_slug: str | None, page: int) -> str | None:
+    tour = get_tour(region_slug, tour_slug)
+    return tour.map_links.get(page)
+
+
 def add_back_to_top_link(markdown: str, threshold: int) -> str:
     if len(markdown) > threshold:
-        return '<a name="page-top"></a>\n' + markdown + "\n<br><br>[Вернуться наверх](#page-top)"
+        return '<a name="page-top"></a>\n' + markdown + "\n<br><br>[К началу страницы](#page-top)"
     return markdown
 
 

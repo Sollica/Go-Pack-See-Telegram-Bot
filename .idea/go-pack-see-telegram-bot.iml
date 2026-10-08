@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="C:\project_bot\.venv" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (Go-Pack-See-Telegram-Bot)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

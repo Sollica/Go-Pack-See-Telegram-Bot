@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
@@ -8,11 +10,12 @@ from data.forms import Form
 from keyboards.navigation_keyboards import (
     cancel_keyboard,
     main_menu_keyboard,
-    skip_keyboard,
+    skip_keyboard
 )
 from utilities.load_data import MarkdownType, get_markdown
-from utilities.save_data import save_suggestion, put_data
+from utilities.save_data import save_bug_report, save_suggestion
 
+logger = logging.getLogger(__name__)
 router = Router()
 
 @router.message(Command("start"))
@@ -72,9 +75,11 @@ async def suggest_tour(event: Message | CallbackQuery, state: FSMContext):
         data = await state.get_data()
         await save_suggestion(
             user_id=event.from_user.id,
+            username=event.from_user.username,
             region_name=data.get("suggested_region_name"),
             tour=tour,
         )
+        logger.info(f"User {event.from_user.username} (user_id: {event.from_user.id}) has suggested a region.")
     await state.clear()
 
 @router.message(Command("bug_report"))
@@ -96,12 +101,14 @@ async def process_bug_report(event: Message | CallbackQuery, state: FSMContext):
     if isinstance(event, CallbackQuery):
         await event.message.edit_text("Отправка отчёта об ошибке отменена.")
     else:
-        json_data = {
-            "user_id": event.from_user.id,
-            "username": event.from_user.username,
-            "bug_description": event.text,
-        }
-        put_data(json_data, "data/jsons/bug_reports.json")
+        await save_bug_report(
+            user_id=event.from_user.id,
+            username=event.from_user.username,
+            report=event.text
+        )
         await event.answer("Спасибо за информацию! Мы уже работаем над исправлением.")
+        logger.info(
+            f"User {event.from_user.username} (user_id: {event.from_user.id}) has reported a bug."
+        )
 
     await state.clear()

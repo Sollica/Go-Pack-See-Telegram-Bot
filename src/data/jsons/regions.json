@@ -2,13 +2,27 @@
   "moscow": {
     "title": "Москва",
     "tours": [
-      {"title": "Проверка", "slug": "test", "pages": 1}
+      {
+        "title": "Проверка",
+        "slug": "test",
+        "pages": 1,
+        "map_links": {}
+      }
     ]
   },
   "tatarstan": {
     "title": "Татарстан",
     "tours": [
-      {"title": "Казань", "slug": "kazan", "pages": 10}
+      {
+        "title": "Казань",
+        "slug": "kazan",
+        "pages": 10,
+        "map_links": {
+          "1": "https://www.google.com",
+          "3": "https://www.google.com",
+          "10": "https://www.google.com"
+        }
+      }
     ]
   }
 }

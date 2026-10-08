@@ -25,13 +25,13 @@ package = false
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-src = ["src"]
+src = ["src", "."]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
 
 [tool.mypy]
 python_version = "3.12"
-mypy_path = "src"
+mypy_path = "src:."
 explicit_package_bases = true
 
