@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from data.callbacks import Action, Nav
-from utilities.load_data import get_region, get_regions, get_tour
+from utilities.load_data import get_region, get_regions, get_tour, get_tour_page_link
 
 
 def button(text: str, nav: Nav) -> InlineKeyboardButton:
@@ -59,8 +59,10 @@ def tour_pages_keyboard(
         page: int) -> InlineKeyboardMarkup:
     region = get_region(region_slug)
     tour = get_tour(region_slug, tour_slug)
+    url = get_tour_page_link(region_slug, tour_slug, page)
     return InlineKeyboardMarkup(
         inline_keyboard=[
+            [InlineKeyboardButton(text="Показать на карте", url=url)] if url else [],
             [
                 button("⏪️", Nav(action=Action.TOUR, region=region.slug, tour=tour_slug, page=1)),
                 button("⬅️", Nav(action=Action.TOUR, region=region.slug, tour=tour_slug, page=page - 1)),
