@@ -5,7 +5,7 @@ __pycache__/
 
 .vscode
 .DS_Store
-scr/data/jsons/suggestions.jsonl
+src/data/jsons/suggestions.jsonl
 src/data/jsons/bug_reports.jsonl
 
 # C extensions
