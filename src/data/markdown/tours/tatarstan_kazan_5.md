@@ -1,4 +1,4 @@
-![Alt tab](https://s3go.kzn.ru/local/2025-07-22/stNGaJnpd2FRfhhp.jpeg)
+[//]: # (![Alt tab]&#40;https://s3go.kzn.ru/local/2025-07-22/stNGaJnpd2FRfhhp.jpeg&#41;)
 
 
 # 🏘️ 5. Старо-Татарская слобода — следствие перемен после 1552 года

@@ -1,4 +1,4 @@
-![Alt tab](https://media.gorbilet.ru/d8/dc/5b/shutterstock_2155709911_evjpfZ4.jpg)
+[//]: # (![Alt tab]&#40;https://media.gorbilet.ru/d8/dc/5b/shutterstock_2155709911_evjpfZ4.jpg&#41;)
 
 # ⛪ 4. Петропавловский собор — купеческая Казань
 

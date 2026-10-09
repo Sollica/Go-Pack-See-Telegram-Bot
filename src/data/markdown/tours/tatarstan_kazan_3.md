@@ -1,5 +1,5 @@
-![Alt tab](https://upload.wikimedia.org/wikipedia/commons/5/58/%D0%91%D0%BB%D0%B0%D0%B3%D0%BE%D0%B2%D0%B5%D1%89%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BE%D0%B1%D0%BE%D1%80_-_panoramio_%282%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=index&utm_content=original)
----
+[//]: # (![Alt tab]&#40;https://upload.wikimedia.org/wikipedia/commons/5/58/%D0%91%D0%BB%D0%B0%D0%B3%D0%BE%D0%B2%D0%B5%D1%89%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BE%D0%B1%D0%BE%D1%80_-_panoramio_%282%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=index&utm_content=original&#41;)
+
 # ⛪ 3. Благовещенский собор — православная Казань
 
 > **📍 Третья точка маршрута**
