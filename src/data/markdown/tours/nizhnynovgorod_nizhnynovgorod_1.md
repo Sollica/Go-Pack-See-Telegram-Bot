@@ -27,6 +27,6 @@
 
 </details>
 
-![Route map](https://raw.githubusercontent.com/Sollica/Go-Pack-See-Telegram-Bot/kot_petya/src/data/images/nizhnynovgorod_route.jpg)
+![Route map](https://raw.githubusercontent.com/Sollica/Go-Pack-See-Telegram-Bot/kot_petya/src/data/images/nizhnynovgorod_route_map.jpg)
 
 Весь маршрут на карте: [открыть в Яндекс Картах](https://yandex.ru/maps/-/CXuIvSze)
