@@ -1,4 +1,4 @@
-![Alexander Nevsky Cathedral](https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Saint_Alexander_Nevsky_Cathedral_in_Nizhny_Novgorod_%28June_2024%29_-_3.jpg/1280px-Saint_Alexander_Nevsky_Cathedral_in_Nizhny_Novgorod_%28June_2024%29_-_3.jpg)
+![Alexander Nevsky Cathedral](local:nizhnynovgorod_tour_6.jpg)
 # 5. Александро-Невский Новоярмарочный собор
 
 С высотой 87 м это самое высокое здание Нижнего Новгорода и его главный — кафедральный — собор.

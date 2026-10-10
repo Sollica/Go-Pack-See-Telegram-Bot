@@ -1,4 +1,4 @@
-![Fedorovsky Embankment](https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/NN_30-06-2022_Fedorovsky_Embankment.jpg/1280px-NN_30-06-2022_Fedorovsky_Embankment.jpg)
+![Fedorovsky Embankment](local:nizhnynovgorod_tour_1.jpg)
 # Храмы, модерн и неоклассика
 
 Нижний Новгород стоит там, где Ока впадает в Волгу, и почти вся его история связана с водой: с ярмаркой, пароходами и купцами, которые разбогатели на волжской торговле. Недаром Нижний называли «карманом России». Наш маршрут — прогулка по этой истории, рассказанная зданиями.
@@ -27,6 +27,6 @@
 
 </details>
 
-![Route map](https://raw.githubusercontent.com/Sollica/Go-Pack-See-Telegram-Bot/kot_petya/src/data/images/nizhnynovgorod_route_map.jpg)
+![Route map](local:nizhnynovgorod_route_map.jpg)
 
 Весь маршрут на карте: [открыть в Яндекс Картах](https://yandex.ru/maps/-/CXuIvSze)

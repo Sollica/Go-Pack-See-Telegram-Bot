@@ -1,4 +1,4 @@
-![Moscow railway station](https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Nizhny_Novgorod._Moskovsky_railway_terminal.jpg/1280px-Nizhny_Novgorod._Moskovsky_railway_terminal.jpg)
+![Moscow railway station](local:nizhnynovgorod_tour_2.jpg)
 # 1. Московский вокзал
 
 Маршрут начинается там, где город встречает большинство гостей, — у Московского вокзала, единственного действующего вокзала Нижнего Новгорода.

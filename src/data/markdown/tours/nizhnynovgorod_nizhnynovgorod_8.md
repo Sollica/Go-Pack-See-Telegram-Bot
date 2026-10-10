@@ -1,4 +1,4 @@
-![Mayak Academy](https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/%D0%90%D0%BA%D0%B0%D0%B4%D0%B5%D0%BC%D0%B8%D1%8F_%D0%9C%D0%B0%D1%8F%D0%BA_%D0%B8%D0%BC%D0%B5%D0%BD%D0%B8_%D0%90.%D0%94._%D0%A1%D0%B0%D1%85%D0%B0%D1%80%D0%BE%D0%B2%D0%B0_%D0%B2_%D0%9D%D0%B8%D0%B6%D0%BD%D0%B5%D0%BC_%D0%9D%D0%BE%D0%B2%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D0%B5.jpg/1280px-%D0%90%D0%BA%D0%B0%D0%B4%D0%B5%D0%BC%D0%B8%D1%8F_%D0%9C%D0%B0%D1%8F%D0%BA_%D0%B8%D0%BC%D0%B5%D0%BD%D0%B8_%D0%90.%D0%94._%D0%A1%D0%B0%D1%85%D0%B0%D1%80%D0%BE%D0%B2%D0%B0_%D0%B2_%D0%9D%D0%B8%D0%B6%D0%BD%D0%B5%D0%BC_%D0%9D%D0%BE%D0%B2%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D0%B5.jpg)
+![Mayak Academy](local:nizhnynovgorod_tour_8.jpg)
 # 7. Академия «Маяк» — промышленный корпус комплекса банка Рукавишниковых
 
 Комплекс спроектировал Фёдор Шехтель — один из главных архитекторов русского модерна, автор Ярославского вокзала и особняка Рябушинского в Москве.

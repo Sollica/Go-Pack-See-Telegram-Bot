@@ -1,4 +1,4 @@
-![Old Fair Cathedral](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/NN_Old_Fair_Cathedral_08-2016_img1.jpg/1280px-NN_Old_Fair_Cathedral_08-2016_img1.jpg)
+![Old Fair Cathedral](local:nizhnynovgorod_tour_4.jpg)
 # 3. Спасский Староярмарочный собор
 
 Собор на нижегородской ярмарке спроектировал Огюст Монферран — будущий автор Исаакиевского собора и Александровской колонны в Петербурге.

@@ -1,4 +1,4 @@
-![Stroganov Church](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/NN_Stroganov_Church.jpg/1280px-NN_Stroganov_Church.jpg)
+![Stroganov Church](local:nizhnynovgorod_tour_7.jpg)
 # 6. Рождественская (Строгановская) церковь
 
 Рождественская церковь — главный образец строгановского барокко: тот же стиль, что у Смоленской (точка 2), но в самом пышном и совершенном виде.

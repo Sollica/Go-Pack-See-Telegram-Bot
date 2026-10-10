@@ -1,4 +1,4 @@
-![Pakgauzy](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/%D0%A4%D0%B0%D1%81%D0%B0%D0%B4_%D0%BF%D0%B0%D0%BA%D0%B3%D0%B0%D1%83%D0%B7%D0%B0%2C_%D0%B4%D0%B0%D0%BB%D1%8C%D0%BD%D0%B5%D0%B3%D0%BE_%D0%BE%D1%82_%D0%A1%D1%82%D1%80%D0%B5%D0%BB%D0%BA%D0%B8.jpg/1280px-%D0%A4%D0%B0%D1%81%D0%B0%D0%B4_%D0%BF%D0%B0%D0%BA%D0%B3%D0%B0%D1%83%D0%B7%D0%B0%2C_%D0%B4%D0%B0%D0%BB%D1%8C%D0%BD%D0%B5%D0%B3%D0%BE_%D0%BE%D1%82_%D0%A1%D1%82%D1%80%D0%B5%D0%BB%D0%BA%D0%B8.jpg)
+![Pakgauzy](local:nizhnynovgorod_tour_5.jpg)
 # 4. Пакгаузы на Стрелке
 
 Пакгаузы — металлические павильоны XIX века с ажурным каркасом, которые пережили две выставки и век работы складами, а сегодня стали культурным центром.

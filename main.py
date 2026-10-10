@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
 from handlers import command_handlers, error_handlers, navigation_handlers
-from middlewares import AnswerCallbackMiddleware
+from middlewares import AnswerCallbackMiddleware, LocalImagesMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +30,7 @@ async def main() -> None:
         raise SystemExit("BOT_TOKEN not set")
 
     bot = Bot(token=token)
+    bot.session.middleware(LocalImagesMiddleware())
     dp = build_dispatcher()
 
     logger.info("Bot is starting")

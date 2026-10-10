@@ -1,4 +1,4 @@
-![Volga Steamship Company building](https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Nizhny_Novgorod._Privolzhsky_Research_Medical_University_P8132403_2200.jpg/1280px-Nizhny_Novgorod._Privolzhsky_Research_Medical_University_P8132403_2200.jpg)
+![Volga Steamship Company building](local:nizhnynovgorod_tour_10.jpg)
 # 9. Здание правления пароходного общества «Волга»
 
 Здание правления пароходного общества «Волга» — один из крупнейших памятников русского неоклассицизма начала XX века в Нижнем Новгороде.

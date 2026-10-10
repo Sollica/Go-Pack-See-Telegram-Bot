@@ -1,4 +1,4 @@
-![Rukavishnikov Estate](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Mansion_of_Rukavishnikov_in_Nizhny_Novgorod.jpg/1280px-Mansion_of_Rukavishnikov_in_Nizhny_Novgorod.jpg)
+![Rukavishnikov Estate](local:nizhnynovgorod_tour_12.jpg)
 # 11. Усадьба Рукавишниковых
 
 Усадьба Рукавишниковых — одна из самых известных достопримечательностей города и яркий образец академической эклектики: итальянское палаццо с барочными деталями на берегу Волги.
