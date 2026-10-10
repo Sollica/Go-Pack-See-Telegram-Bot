@@ -87,7 +87,7 @@ pip install "aiogram>=3.31.0" "aiofiles>=25.1.0" "python-dotenv>=1.0.0"
 PYTHONPATH=src python main.py
 ```
 
-Остановить бота — `Ctrl + C / Cmd + C`.
+Остановить бота — `Ctrl + C`.
 
 ## Конфигурация
 
