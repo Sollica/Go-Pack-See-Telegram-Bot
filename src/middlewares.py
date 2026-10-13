@@ -1,8 +1,9 @@
 import logging
+import random
 import re
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
-from pathlib import Path
+from fnmatch import fnmatch
 from typing import Any
 
 from aiogram import BaseMiddleware, Bot
@@ -12,8 +13,8 @@ from aiogram.exceptions import TelegramAPIError
 from aiogram.methods import EditMessageText, SendRichMessage, TelegramMethod
 from aiogram.methods.base import TelegramType
 from aiogram.types import (
+    BufferedInputFile,
     CallbackQuery,
-    FSInputFile,
     InputMediaPhoto,
     InputRichMessage,
     InputRichMessageMedia,
@@ -21,6 +22,8 @@ from aiogram.types import (
     RichBlockPhoto,
     TelegramObject,
 )
+
+from utilities.database import image_store
 
 logger = logging.getLogger(__name__)
 
@@ -38,14 +41,15 @@ class AnswerCallbackMiddleware(BaseMiddleware):
         return await handler(event, data)
 
 
-IMAGES_DIR = (Path(__file__).resolve().parent / "data" / "images").resolve()
 LOCAL_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(local:([^)\s]+)\)")
 
 
 class LocalImagesMiddleware(BaseRequestMiddleware):
-    """Подставляет в rich-сообщения картинки из data/images по ссылкам ``local:имя_файла``.
+    """Подставляет в rich-сообщения картинки из хранилища Supabase по ссылкам ``local:имя_файла``.
 
-    При первом показе файл загружается в Telegram, затем используется сохранённый file_id.
+    Имя может быть шаблоном со звёздочкой (``local:main_menu_*.jpg``): тогда при каждом
+    показе выбирается случайный подходящий файл. При первом показе файл загружается
+    в Telegram, затем используется сохранённый file_id.
     """
 
     def __init__(self) -> None:
@@ -68,7 +72,7 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
             Результат запроса (сообщение).
 
         Raises:
-            FileNotFoundError: Если указанного файла нет в папке data/images.
+            FileNotFoundError: Если указанной картинки нет в хранилище.
         """
         rich = getattr(method, "rich_message", None)
         if not (
@@ -84,11 +88,16 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
 
         def replace(match: re.Match[str]) -> str:
             caption, filename = match.groups()
-            path = (IMAGES_DIR / filename).resolve()
-            if path.parent != IMAGES_DIR or not path.is_file():
+            if "*" in filename:
+                candidates = sorted(name for name in image_store if fnmatch(name, filename))
+                if not candidates:
+                    raise FileNotFoundError(f"No images match: {filename}")
+                filename = random.choice(candidates)
+            data = image_store.get(filename)
+            if data is None:
                 raise FileNotFoundError(f"Image not found: {filename}")
             media_id = f"img{len(media) + 1}"
-            source = self.file_ids.get(filename) or FSInputFile(path)
+            source = self.file_ids.get(filename) or BufferedInputFile(data, filename=filename)
             media.append(InputRichMessageMedia(id=media_id, media=InputMediaPhoto(media=source)))
             filenames.append(filename)
             return f"![{caption}](tg://photo?id={media_id})"
