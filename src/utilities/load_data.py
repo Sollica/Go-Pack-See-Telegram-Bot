@@ -1,16 +1,11 @@
-import json
 import re
 from dataclasses import dataclass
 from enum import StrEnum
 from functools import lru_cache
-from pathlib import Path
 from typing import Any
 
-import aiofiles
+from utilities.database import markdown_store, region_rows, tour_rows
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-JSONS_DIR = DATA_DIR / "jsons"
-MARKDOWN_DIR = DATA_DIR / "markdown"
 
 SLUG_RE = re.compile(r"[a-z0-9_]+")
 
@@ -40,11 +35,6 @@ class MarkdownType(StrEnum):
     TOUR = "tour"
 
 
-def load_data(path: Path | str) -> Any:
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-
-
 def check_slug(slug: Any) -> None:
     if not isinstance(slug, str) or not SLUG_RE.fullmatch(slug):
         raise ValueError(f"Wrong slug format: {slug!r}")
@@ -52,20 +42,30 @@ def check_slug(slug: Any) -> None:
 
 @lru_cache
 def get_regions() -> dict[str, Region]:
-    raw = load_data(JSONS_DIR / "regions.json")
+    """Собирает каталог регионов из таблиц regions и tours, загруженных при старте.
+
+    Результат кэшируется: каталог меняется только после перезапуска бота.
+
+    Returns:
+        Словарь slug региона -> Region в порядке position.
+
+    Raises:
+        ValueError: Если slug региона или маршрута имеет неверный формат.
+    """
+    tours_by_region: dict[int, list[Tour]] = {}
+    for tour in tour_rows:
+        check_slug(tour["slug"])
+        map_links = {int(key): link for key, link in tour["map_links"].items()}
+        tours_by_region.setdefault(tour["region_id"], []).append(Tour(
+            title=tour["title"],
+            slug=tour["slug"],
+            pages=tour["pages"],
+            map_links=map_links))
     regions: dict[str, Region] = {}
-    for region_slug, region_data in raw.items():
-        check_slug(region_slug)
-        tours = []
-        for tour in region_data["tours"]:
-            check_slug(tour["slug"])
-            map_links = {int(key): link for key, link in tour["map_links"].items()}
-            tours.append(Tour(
-                title=tour["title"],
-                slug=tour["slug"],
-                pages=tour["pages"],
-                map_links=map_links))
-        regions[region_slug] = Region(region_data["title"], region_slug, tuple(tours))
+    for row in region_rows:
+        check_slug(row["slug"])
+        regions[row["slug"]] = Region(
+            row["title"], row["slug"], tuple(tours_by_region.get(row["id"], ())))
     return regions
 
 
@@ -94,23 +94,32 @@ def add_back_to_top_link(markdown: str, threshold: int) -> str:
     return markdown
 
 
-async def read_markdown(folder: str, filename: str) -> str:
-    base = (MARKDOWN_DIR / folder).resolve()
-    path = (base / filename).resolve()
-    try:
-        async with aiofiles.open(path, encoding="utf-8") as f:
-            return add_back_to_top_link(await f.read(), 700)
-    except FileNotFoundError as exc:
-        raise UnknownResourceError(f"Markdown file not found: {path.name}") from exc
+async def read_markdown(folder: str, name: str) -> str:
+    """Возвращает текст страницы из загруженного при старте контента.
+
+    Args:
+        folder: Раздел контента: menus, about_region или tours.
+        name: Имя страницы без расширения .md.
+
+    Returns:
+        Markdown страницы со ссылкой «К началу страницы» для длинных текстов.
+
+    Raises:
+        UnknownResourceError: Если такой страницы нет в базе.
+    """
+    content = markdown_store.get((folder, name))
+    if content is None:
+        raise UnknownResourceError(f"Markdown page not found: {folder}/{name}")
+    return add_back_to_top_link(content, 700)
 
 
 async def get_markdown(menu_type: MarkdownType, menu_name: str | None) -> str:
     match menu_type:
         case MarkdownType.MENU:
-            return await read_markdown("menus", f"{menu_name}_menu.md")
+            return await read_markdown("menus", f"{menu_name}_menu")
         case MarkdownType.TOUR:
-            return await read_markdown("tours", f"{menu_name}.md")
+            return await read_markdown("tours", menu_name)
         case MarkdownType.ABOUT_REGION:
-            return await read_markdown("about_region", f"about_{menu_name}.md")
+            return await read_markdown("about_region", f"about_{menu_name}")
         case _:
             raise UnknownResourceError(f"Unknown menu type: {menu_type!r}")

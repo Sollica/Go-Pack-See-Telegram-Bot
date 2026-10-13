@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from handlers import command_handlers, error_handlers, navigation_handlers
 from middlewares import AnswerCallbackMiddleware, LocalImagesMiddleware
+from utilities.database import ContentLoadError, load_content
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,11 @@ async def main() -> None:
     token = os.getenv("BOT_TOKEN")
     if not token:
         raise SystemExit("BOT_TOKEN not set")
+
+    try:
+        await load_content()
+    except ContentLoadError as exc:
+        raise SystemExit(f"Бот не запущен: {exc}") from exc
 
     bot = Bot(token=token)
     bot.session.middleware(LocalImagesMiddleware())
