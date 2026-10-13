@@ -9,12 +9,14 @@ from supabase import AsyncClient, acreate_client
 logger = logging.getLogger(__name__)
 
 IMAGES_BUCKET = "images"
+SIGNED_URL_TTL = 365 * 24 * 60 * 60
+"""Срок жизни ссылок на картинки, в секундах (год)."""
 
 markdown_store: dict[tuple[str, str], str] = {}
 """Тексты меню и маршрутов: (папка, имя файла без .md) -> Markdown."""
 
-image_store: dict[str, bytes] = {}
-"""Картинки из хранилища Supabase: имя файла -> содержимое."""
+image_store: dict[str, str] = {}
+"""Картинки из хранилища Supabase: имя файла -> подписанная ссылка на файл."""
 
 region_rows: list[dict[str, Any]] = []
 """Строки таблицы regions, отсортированные по position."""
@@ -49,7 +51,10 @@ async def get_client() -> AsyncClient:
 
 
 async def load_content() -> None:
-    """Загружает каталог регионов, все тексты и картинки из Supabase в память.
+    """Загружает каталог регионов, все тексты и ссылки на картинки из Supabase в память.
+
+    Сами картинки не скачиваются: для каждой одним запросом получается подписанная
+    ссылка, по которой файл при первом показе забирает Telegram.
 
     Вызывается один раз перед запуском бота. Если загрузить контент не удалось,
     бот не должен запускаться.
@@ -59,14 +64,18 @@ async def load_content() -> None:
     """
     try:
         client = await get_client()
-        regions = (await client.table("regions").select("*").order("position").execute()).data
-        tours = (await client.table("tours").select("*").order("position").execute()).data
-        response = await client.table("markdown").select("kind,name,content").execute()
-        rows: list[dict[str, Any]] = response.data
         bucket = client.storage.from_(IMAGES_BUCKET)
-        files = await bucket.list("", {"limit": 1000})
+        regions_resp, tours_resp, markdown_resp, files = await asyncio.gather(
+            client.table("regions").select("*").order("position").execute(),
+            client.table("tours").select("*").order("position").execute(),
+            client.table("markdown").select("kind,name,content").execute(),
+            bucket.list("", {"limit": 1000}),
+        )
+        regions: list[dict[str, Any]] = regions_resp.data
+        tours: list[dict[str, Any]] = tours_resp.data
+        rows: list[dict[str, Any]] = markdown_resp.data
         names = [f["name"] for f in files if not f["name"].startswith(".")]
-        contents = await asyncio.gather(*(bucket.download(name) for name in names))
+        signed = await bucket.create_signed_urls(names, SIGNED_URL_TTL) if names else []
     except ContentLoadError:
         raise
     except Exception as exc:
@@ -83,7 +92,7 @@ async def load_content() -> None:
     markdown_store.clear()
     markdown_store.update({(row["kind"], row["name"]): row["content"] for row in rows})
     image_store.clear()
-    image_store.update(dict(zip(names, contents)))
+    image_store.update({item["path"]: item["signedURL"] for item in signed if item["signedURL"]})
     logger.info(
         "Loaded %d regions, %d tours, %d markdown pages and %d images",
         len(region_rows), len(tour_rows), len(markdown_store), len(image_store),

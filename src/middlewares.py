@@ -13,7 +13,6 @@ from aiogram.exceptions import TelegramAPIError
 from aiogram.methods import EditMessageText, SendRichMessage, TelegramMethod
 from aiogram.methods.base import TelegramType
 from aiogram.types import (
-    BufferedInputFile,
     CallbackQuery,
     InputMediaPhoto,
     InputRichMessage,
@@ -93,11 +92,11 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
                 if not candidates:
                     raise FileNotFoundError(f"No images match: {filename}")
                 filename = random.choice(candidates)
-            data = image_store.get(filename)
-            if data is None:
+            url = image_store.get(filename)
+            if url is None:
                 raise FileNotFoundError(f"Image not found: {filename}")
             media_id = f"img{len(media) + 1}"
-            source = self.file_ids.get(filename) or BufferedInputFile(data, filename=filename)
+            source = self.file_ids.get(filename) or url
             media.append(InputRichMessageMedia(id=media_id, media=InputMediaPhoto(media=source)))
             filenames.append(filename)
             return f"![{caption}](tg://photo?id={media_id})"
