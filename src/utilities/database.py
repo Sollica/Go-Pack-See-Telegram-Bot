@@ -106,8 +106,8 @@ async def insert_row(table: str, record: dict[str, Any]) -> None:
     """Добавляет одну запись в таблицу Supabase.
 
     Args:
-        table: Имя таблицы.
-        record: Значения полей новой записи.
+        table (str): Имя таблицы.
+        record (dict[str, Any]): Значения полей новой записи.
     """
     client = await get_client()
     await client.table(table).insert(record).execute()

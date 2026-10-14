@@ -44,9 +44,9 @@ class AnswerCallbackMiddleware(BaseMiddleware):
         """Подтверждает callback-запрос и передаёт событие обработчику.
 
         Args:
-            handler(Callable): Следующий обработчик события.
-            event(TelegramObject): Обрабатываемое событие Telegram.
-            data(dict[str, Any]): Данные, передаваемые между middleware и обработчиками.
+            handler (Callable): Следующий обработчик события.
+            event (TelegramObject): Обрабатываемое событие Telegram.
+            data (dict[str, Any]): Данные, передаваемые между middleware и обработчиками.
 
         Returns:
             Any: Результат выполнения обработчика.
@@ -80,9 +80,9 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         """Заменяет локальные картинки в исходящем запросе и запоминает их file_id.
 
         Args:
-            make_request(NextRequestMiddlewareType[TelegramType]): Следующий обработчик запроса.
-            bot(Bot): Экземпляр бота.
-            method(TelegramMethod[TelegramType]): Отправляемый метод Telegram API.
+            make_request (NextRequestMiddlewareType[TelegramType]): Следующий обработчик запроса.
+            bot (Bot): Экземпляр бота.
+            method (TelegramMethod[TelegramType]): Отправляемый метод Telegram API.
 
         Returns:
             TelegramType: Результат запроса (сообщение).
@@ -132,8 +132,8 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         картинка просто загрузится заново в следующий раз.
 
         Args:
-            result(Any): Результат запроса (обычно отправленное или изменённое сообщение).
-            filenames(list[str]): Имена локальных файлов в порядке появления в сообщении.
+            result (Any): Результат запроса (обычно отправленное или изменённое сообщение).
+            filenames (list[str]): Имена локальных файлов в порядке появления в сообщении.
         """
         message = getattr(result, "result", result)
         if not isinstance(message, Message) or message.rich_message is None:
