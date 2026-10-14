@@ -39,7 +39,7 @@ def check_slug(slug: Any) -> None:
     """Проверяет, что slug соответствует допустимому формату.
 
     Args:
-        slug(Any): Значение, которое нужно проверить.
+        slug (Any): Значение, которое нужно проверить.
 
     Raises:
         ValueError: Если значение не является строкой или содержит
@@ -82,7 +82,7 @@ def get_region(slug: str | None) -> Region:
     """Возвращает регион по его slug.
 
     Args:
-        slug(str | NOone): Уникальный идентификатор региона.
+        slug (str | NOone): Уникальный идентификатор региона.
 
     Returns:
         Region: Найденный регион.
@@ -100,8 +100,8 @@ def get_tour(region_slug: str | None, tour_slug: str | None) -> Tour:
     """Находит маршрут в указанном регионе.
 
     Args:
-        region_slug(str | None): Slug региона, которому принадлежит маршрут.
-        tour_slug(str | None): Slug маршрута.
+        region_slug (str | None): Slug региона, которому принадлежит маршрут.
+        tour_slug (str | None): Slug маршрута.
 
     Returns:
         Tour: Найденный маршрут.
@@ -119,9 +119,9 @@ def get_tour_page_link(region_slug: str | None, tour_slug: str | None, page: int
     """Возвращает ссылку на карту для указанной страницы маршрута.
 
     Args:
-        region_slug(str | None): Slug региона.
-        tour_slug(str | None): Slug маршрута.
-        page(int): Номер страницы маршрута.
+        region_slug (str | None): Slug региона.
+        tour_slug (str | None): Slug маршрута.
+        page (int): Номер страницы маршрута.
 
     Returns:
         str | None: URL карты или None, если для страницы ссылка не задана.
@@ -137,8 +137,8 @@ def add_back_to_top_link(markdown: str, threshold: int) -> str:
     """Добавляет ссылку для возврата к началу длинной страницы.
 
     Args:
-        markdown(str): Исходный текст в формате Markdown.
-        threshold(int): Минимальная длина текста, при превышении которой
+        markdown (str): Исходный текст в формате Markdown.
+        threshold (int): Минимальная длина текста, при превышении которой
             добавляется ссылка.
 
     Returns:
@@ -154,8 +154,8 @@ async def read_markdown(folder: str, name: str) -> str:
     """Возвращает текст страницы из загруженного при старте контента.
 
     Args:
-        folder(str): Раздел контента: menus, about_region или tours.
-        name(str): Имя страницы без расширения .md.
+        folder (str): Раздел контента: menus, about_region или tours.
+        name (str): Имя страницы без расширения .md.
 
     Returns:
         str: Markdown страницы со ссылкой «К началу страницы» для длинных текстов.
@@ -176,9 +176,9 @@ async def get_markdown(menu_type: MarkdownType, menu_name: str | None) -> str:
     его в read_markdown для получения текста.
 
     Args:
-        menu_type(MarkdownType): Тип контента: главное меню, описание региона
+        menu_type (MarkdownType): Тип контента: главное меню, описание региона
             или страница маршрута.
-        menu_name(str): Название или slug региона, маршрута либо меню.
+        menu_name (str): Название или slug региона, маршрута либо меню.
 
     Returns:
         str: Текст страницы в формате Markdown.

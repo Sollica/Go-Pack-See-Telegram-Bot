@@ -20,7 +20,7 @@ async def notify_user(update: Update) -> None:
     в журнал.
 
     Args:
-        update(Update): Обновление Telegram, при обработке которого возникла ошибка.
+        update (Update): Обновление Telegram, при обработке которого возникла ошибка.
     """
     try:
         if update.callback_query and isinstance(update.callback_query.message, Message):
@@ -40,7 +40,7 @@ async def on_error(event: ErrorEvent) -> bool:
     После этого пытается уведомить пользователя об ошибке.
 
     Args:
-        event(ErrorEvent): Событие aiogram, содержащее исходное обновление
+        event (ErrorEvent): Событие aiogram, содержащее исходное обновление
             и возникшее исключение.
 
     Returns:
