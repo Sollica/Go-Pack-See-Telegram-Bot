@@ -1,15 +1,15 @@
 from aiogram import F, Router
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InputRichMessage, Message
 
-from data.callbacks import Action, Nav
-from keyboards.navigation_keyboards import (
+from src.data.callbacks import Action, Nav
+from src.keyboards.navigation_keyboards import (
     back_to_region_keyboard,
     main_menu_keyboard,
     region_keyboard,
     tour_pages_keyboard,
     tours_keyboard,
 )
-from utilities.load_data import MarkdownType, get_markdown, get_tour
+from src.utilities.load_data import MarkdownType, get_markdown, get_tour
 
 router = Router()
 

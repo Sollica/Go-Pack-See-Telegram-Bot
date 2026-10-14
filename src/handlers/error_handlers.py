@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.exceptions import TelegramAPIError, TelegramBadRequest
 from aiogram.types import ErrorEvent, Message, Update
 
-from utilities.load_data import UnknownResourceError
+from src.utilities.load_data import UnknownResourceError
 
 logger = logging.getLogger(__name__)
 router = Router()

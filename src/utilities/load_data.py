@@ -4,7 +4,7 @@ from enum import StrEnum
 from functools import lru_cache
 from typing import Any
 
-from utilities.database import markdown_store, region_rows, tour_rows
+from src.utilities.database import markdown_store, region_rows, tour_rows
 
 
 SLUG_RE = re.compile(r"[a-z0-9_]+")

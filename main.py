@@ -5,9 +5,9 @@ import os
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
-from handlers import command_handlers, error_handlers, navigation_handlers
-from middlewares import AnswerCallbackMiddleware, LocalImagesMiddleware
-from utilities.database import ContentLoadError, load_content
+from src.handlers import command_handlers, error_handlers, navigation_handlers
+from src.middlewares import AnswerCallbackMiddleware, LocalImagesMiddleware
+from src.utilities.database import ContentLoadError, load_content
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from data.callbacks import Action, Nav
-from utilities.load_data import get_region, get_regions, get_tour, get_tour_page_link
+from src.data.callbacks import Action, Nav
+from src.utilities.load_data import get_region, get_regions, get_tour, get_tour_page_link
 
 
 def button(text: str, nav: Nav) -> InlineKeyboardButton:

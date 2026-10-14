@@ -6,14 +6,14 @@ from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InputRichMessage, Message
 
-from data.forms import Form
-from keyboards.navigation_keyboards import (
+from src.data.forms import Form
+from src.keyboards.navigation_keyboards import (
     cancel_keyboard,
     main_menu_keyboard,
     skip_keyboard
 )
-from utilities.load_data import MarkdownType, get_markdown
-from utilities.save_data import save_bug_report, save_suggestion
+from src.utilities.load_data import MarkdownType, get_markdown
+from src.utilities.save_data import save_bug_report, save_suggestion
 
 logger = logging.getLogger(__name__)
 router = Router()
