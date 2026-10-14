@@ -38,7 +38,7 @@ def check_slug(slug: Any) -> None:
     """Проверяет, что slug соответствует допустимому формату.
 
     Args:
-        slug: Значение, которое нужно проверить.
+        slug(Any): Значение, которое нужно проверить.
 
     Raises:
         ValueError: Если значение не является строкой или содержит
@@ -55,7 +55,7 @@ def get_regions() -> dict[str, Region]:
     Результат кэшируется: каталог меняется только после перезапуска бота.
 
     Returns:
-        Словарь slug региона -> Region в порядке position.
+        dict[str, Region]: Словарь slug региона -> Region в порядке position.
 
     Raises:
         ValueError: Если slug региона или маршрута имеет неверный формат.
@@ -80,10 +80,10 @@ def get_region(slug: str | None) -> Region:
     """Возвращает регион по его slug.
 
     Args:
-        slug: Уникальный идентификатор региона.
+        slug(str | NOone): Уникальный идентификатор региона.
 
     Returns:
-        Найденный регион.
+        Region: Найденный регион.
 
     Raises:
         UnknownResourceError: Если регион не найден или slug не указан.
@@ -98,11 +98,11 @@ def get_tour(region_slug: str | None, tour_slug: str | None) -> Tour:
     """Находит маршрут в указанном регионе.
 
     Args:
-        region_slug: Slug региона, которому принадлежит маршрут.
-        tour_slug: Slug маршрута.
+        region_slug(str | None): Slug региона, которому принадлежит маршрут.
+        tour_slug(str | None): Slug маршрута.
 
     Returns:
-        Найденный маршрут.
+        Tour: Найденный маршрут.
 
     Raises:
         UnknownResourceError: Если регион или маршрут не найдены.
@@ -117,12 +117,12 @@ def get_tour_page_link(region_slug: str | None, tour_slug: str | None, page: int
     """Возвращает ссылку на карту для указанной страницы маршрута.
 
     Args:
-        region_slug: Slug региона.
-        tour_slug: Slug маршрута.
-        page: Номер страницы маршрута.
+        region_slug(str | None): Slug региона.
+        tour_slug(str | None): Slug маршрута.
+        page(int): Номер страницы маршрута.
 
     Returns:
-        URL карты или None, если для страницы ссылка не задана.
+        str | None: URL карты или None, если для страницы ссылка не задана.
 
     Raises:
         UnknownResourceError: Если регион или маршрут не найдены.
@@ -135,12 +135,12 @@ def add_back_to_top_link(markdown: str, threshold: int) -> str:
     """Добавляет ссылку для возврата к началу длинной страницы.
 
     Args:
-        markdown: Исходный текст в формате Markdown.
-        threshold: Минимальная длина текста, при превышении которой
+        markdown(str): Исходный текст в формате Markdown.
+        threshold(int): Минимальная длина текста, при превышении которой
             добавляется ссылка.
 
     Returns:
-        Исходный текст со ссылкой в начале и конце либо без изменений,
+        str: Исходный текст со ссылкой в начале и конце либо без изменений,
         если его длина не превышает threshold.
     """
     if len(markdown) > threshold:
@@ -152,11 +152,11 @@ async def read_markdown(folder: str, name: str) -> str:
     """Возвращает текст страницы из загруженного при старте контента.
 
     Args:
-        folder: Раздел контента: menus, about_region или tours.
-        name: Имя страницы без расширения .md.
+        folder(str): Раздел контента: menus, about_region или tours.
+        name(str): Имя страницы без расширения .md.
 
     Returns:
-        Markdown страницы со ссылкой «К началу страницы» для длинных текстов.
+        str: Markdown страницы со ссылкой «К началу страницы» для длинных текстов.
 
     Raises:
         UnknownResourceError: Если такой страницы нет в базе.
@@ -174,12 +174,12 @@ async def get_markdown(menu_type: MarkdownType, menu_name: str | None) -> str:
     его в read_markdown для получения текста.
 
     Args:
-        menu_type: Тип контента: главное меню, описание региона
+        menu_type(MarkdownType): Тип контента: главное меню, описание региона
             или страница маршрута.
-        menu_name: Название или slug региона, маршрута либо меню.
+        menu_name(str): Название или slug региона, маршрута либо меню.
 
     Returns:
-        Текст страницы в формате Markdown.
+        str: Текст страницы в формате Markdown.
 
     Raises:
         UnknownResourceError: Если страница с указанным именем

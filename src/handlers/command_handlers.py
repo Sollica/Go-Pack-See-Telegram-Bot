@@ -22,8 +22,8 @@ async def start(message: types.Message, state: FSMContext):
     Отправляет приветственное сообщение и открывает главное меню.
 
     Args:
-        message: Сообщение пользователя с командой /start.
-        state: Контекст конечного автомата пользователя.
+        message(types.Message): Сообщение пользователя с командой /start.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     await message.answer(
         (
@@ -45,8 +45,8 @@ async def main_menu(message: types.Message, state: FSMContext):
     содержимое главного меню с клавиатурой навигации.
 
     Args:
-        message: Сообщение пользователя с командой /main_menu.
-        state: Контекст конечного автомата пользователя.
+        message(types.Message): Сообщение пользователя с командой /main_menu.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     await state.clear()
     await message.answer_rich(
@@ -63,8 +63,8 @@ async def suggest(message: types.Message, state: FSMContext):
     диалог в состояние ожидания названия.
 
     Args:
-        message: Сообщение пользователя с командой /suggest.
-        state: Контекст конечного автомата пользователя.
+        message(types.Message): Сообщение пользователя с командой /suggest.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     await message.answer(
         (
@@ -87,8 +87,8 @@ async def suggest_region(event: Message | CallbackQuery, state: FSMContext):
     При получении callback-запроса отменяет предложение.
 
     Args:
-        event: Сообщение пользователя или callback-запрос от кнопки.
-        state: Контекст конечного автомата пользователя.
+        event(Message | CallbackQuery): Сообщение пользователя или callback-запрос от кнопки.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     if isinstance(event, CallbackQuery):
         await event.message.edit_text("Запрос на добавление региона отменён.")
@@ -115,8 +115,8 @@ async def suggest_tour(event: Message | CallbackQuery, state: FSMContext):
     сохраняет название региона и описание маршрута.
 
     Args:
-        event: Сообщение пользователя или callback-запрос от кнопки.
-        state: Контекст конечного автомата пользователя.
+        event(Message | CallbackQuery): Сообщение пользователя или callback-запрос от кнопки.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     tour = None
     if isinstance(event, CallbackQuery):
@@ -150,8 +150,8 @@ async def bug_report_start(message: types.Message, state: FSMContext):
     диалог в состояние ожидания отчёта.
 
     Args:
-        message: Сообщение пользователя с командой /bug_report.
-        state: Контекст конечного автомата пользователя.
+        message(types.Message): Сообщение пользователя с командой /bug_report.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     await message.answer(
         (
@@ -174,8 +174,8 @@ async def process_bug_report(event: Message | CallbackQuery, state: FSMContext):
     После обработки очищает состояние пользователя.
 
     Args:
-        event: Сообщение пользователя или callback-запрос от кнопки.
-        state: Контекст конечного автомата пользователя.
+        event(Message | CallbackQuery): Сообщение пользователя или callback-запрос от кнопки.
+        state(FSMContext): Контекст конечного автомата пользователя.
     """
     if isinstance(event, CallbackQuery):
         await event.message.edit_text("Отправка отчёта об ошибке отменена.")

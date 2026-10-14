@@ -21,9 +21,9 @@ async def show(callback: CallbackQuery, markdown: str, keyboard: InlineKeyboardM
     завершает выполнение без изменений.
 
     Args:
-        callback: Callback-запрос, вызвавший обновление сообщения.
-        markdown: Markdown-текст для отображения.
-        keyboard: Клавиатура, прикрепляемая к сообщению.
+        callback(CallbackQuery): Callback-запрос, вызвавший обновление сообщения.
+        markdown(str): Markdown-текст для отображения.
+        keyboard(InlineKeyboardMarkup): Клавиатура, прикрепляемая к сообщению.
     """
     if not isinstance(callback.message, Message):
         return
@@ -38,7 +38,7 @@ async def on_main(callback: CallbackQuery) -> None:
     """Открывает главное меню по нажатию на кнопку навигации.
 
     Args:
-        callback: Callback-запрос от кнопки главного меню.
+        callback(CallbackQuery): Callback-запрос от кнопки главного меню.
     """
     await show(callback, await get_markdown(MarkdownType.MENU, "main"), main_menu_keyboard())
 
@@ -51,8 +51,8 @@ async def on_region(callback: CallbackQuery, callback_data: Nav) -> None:
     с действиями, доступными для выбранного региона.
 
     Args:
-        callback: Callback-запрос от кнопки выбора региона.
-        callback_data: Данные навигации с идентификатором региона.
+        callback(CallbackQuery): Callback-запрос от кнопки выбора региона.
+        callback_data(Nav): Данные навигации с идентификатором региона.
     """
     await show(
         callback,
@@ -69,8 +69,8 @@ async def on_about(callback: CallbackQuery, callback_data: Nav) -> None:
     для возврата к его меню.
 
     Args:
-        callback: Callback-запрос от кнопки информации о регионе.
-        callback_data: Данные навигации с идентификатором региона.
+        callback(CallbackQuery): Callback-запрос от кнопки информации о регионе.
+        callback_data(Nav): Данные навигации с идентификатором региона.
     """
     await show(
         callback,
@@ -87,8 +87,8 @@ async def on_tours(callback: CallbackQuery, callback_data: Nav) -> None:
     клавиатуру со списком доступных маршрутов.
 
     Args:
-        callback: Callback-запрос от кнопки перехода к экскурсиям.
-        callback_data: Данные навигации с идентификатором региона.
+        callback(CallbackQuery): Callback-запрос от кнопки перехода к экскурсиям.
+        callback_data(Nav): Данные навигации с идентификатором региона.
     """
     await show(
         callback,
@@ -107,8 +107,8 @@ async def on_tour(callback: CallbackQuery, callback_data: Nav) -> None:
     пользователю уведомление с номером первой или последней страницы.
 
     Args:
-        callback: Callback-запрос от кнопки экскурсии или пагинации.
-        callback_data: Данные навигации с идентификаторами региона,
+        callback(CallbackQuery): Callback-запрос от кнопки экскурсии или пагинации.
+        callback_data(Nav): Данные навигации с идентификаторами региона,
             экскурсии и номером страницы.
     """
     page = callback_data.page

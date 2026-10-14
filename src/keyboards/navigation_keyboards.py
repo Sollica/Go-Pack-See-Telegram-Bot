@@ -8,8 +8,8 @@ def button(text: str, nav: Nav) -> InlineKeyboardButton:
     """Создаёт кнопку с данными для навигации.
 
     Args:
-        text: Текст, отображаемый на кнопке.
-        nav: Данные навигации, которые будут переданы при нажатии.
+        text(str): Текст, отображаемый на кнопке.
+        nav(Nav): Данные навигации, которые будут переданы при нажатии.
 
     Returns:
         InlineKeyboardButton: Кнопка с упакованными callback-данными.
@@ -49,7 +49,7 @@ def region_keyboard(region: str | None) -> InlineKeyboardMarkup:
     """Создаёт клавиатуру меню выбранного региона.
 
     Args:
-        region: Идентификатор региона.
+        region(str | None): Идентификатор региона.
 
     Returns:
         InlineKeyboardMarkup: Клавиатура с переходами к маршрутам,
@@ -70,7 +70,7 @@ def back_to_region_keyboard(region: str | None) -> InlineKeyboardMarkup:
     """Создаёт клавиатуру для возврата к меню региона.
 
     Args:
-        region: Идентификатор региона.
+        region(str | None): Идентификатор региона.
 
     Returns:
         InlineKeyboardMarkup: Клавиатура с кнопкой возврата.
@@ -87,7 +87,7 @@ def tours_keyboard(region_slug: str | None) -> InlineKeyboardMarkup:
     к меню выбранного региона.
 
     Args:
-        region_slug: Идентификатор региона.
+        region_slug(str | None): Идентификатор региона.
 
     Returns:
         InlineKeyboardMarkup: Клавиатура со списком экскурсий.
@@ -114,9 +114,9 @@ def tour_pages_keyboard(
     перехода между страницами и кнопку возврата к списку экскурсий.
 
     Args:
-        region_slug: Идентификатор региона.
-        tour_slug: Идентификатор экскурсии.
-        page: Номер текущей страницы.
+        region_slug(str | None): Идентификатор региона.
+        tour_slug(str | None): Идентификатор экскурсии.
+        page(int): Номер текущей страницы.
 
     Returns:
         InlineKeyboardMarkup: Клавиатура с элементами навигации
