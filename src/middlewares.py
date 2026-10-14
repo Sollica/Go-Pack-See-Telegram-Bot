@@ -28,12 +28,29 @@ logger = logging.getLogger(__name__)
 
 
 class AnswerCallbackMiddleware(BaseMiddleware):
+    """Автоматически подтверждает callback-запросы Telegram.
+
+    Если обработчик не помечен флагом manual_answer, отправляет
+    пустой ответ на callback до выполнения самого обработчика.
+    Ошибки Telegram API при подтверждении игнорируются.
+    """
+
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
+        """Подтверждает callback-запрос и передаёт событие обработчику.
+
+        Args:
+            handler: Следующий обработчик события.
+            event: Обрабатываемое событие Telegram.
+            data: Данные, передаваемые между middleware и обработчиками.
+
+        Returns:
+            Результат выполнения обработчика.
+        """
         if isinstance(event, CallbackQuery) and not get_flag(data, "manual_answer"):
             with suppress(TelegramAPIError):
                 await event.answer()
@@ -86,6 +103,7 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         media: list[InputRichMessageMedia] = []
 
         def replace(match: re.Match[str]) -> str:
+            """Заменяет локальную ссылку на изображение ссылкой Telegram."""
             caption, filename = match.groups()
             if "*" in filename:
                 candidates = sorted(name for name in image_store if fnmatch(name, filename))
@@ -121,7 +139,9 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         if not isinstance(message, Message) or message.rich_message is None:
             return
         try:
-            photos = [block for block in message.rich_message.blocks if isinstance(block, RichBlockPhoto)]
+            photos = [
+                block for block in message.rich_message.blocks if isinstance(block, RichBlockPhoto)
+            ]
             if len(photos) != len(filenames):
                 return
             for filename, block in zip(filenames, photos):

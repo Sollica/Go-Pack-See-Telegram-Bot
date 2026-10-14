@@ -13,6 +13,16 @@ logger = logging.getLogger(__name__)
 
 
 def build_dispatcher() -> Dispatcher:
+    """Создаёт и настраивает диспетчер бота.
+
+    Регистрирует middleware для обработки callback-запросов
+    и подключает маршрутизаторы для обработки ошибок, навигации
+    и команд пользователя.
+
+    Returns:
+        Dispatcher: Настроенный диспетчер с зарегистрированными
+            маршрутизаторами и middleware.
+    """
     dp = Dispatcher()
     dp.callback_query.middleware(AnswerCallbackMiddleware())
     for router in (
@@ -25,6 +35,16 @@ def build_dispatcher() -> Dispatcher:
 
 
 async def main() -> None:
+    """Инициализирует и запускает Telegram-бота.
+
+    Загружает переменные окружения, проверяет наличие токена бота,
+    загружает содержимое из базы данных, настраивает middleware
+    сессии и запускает обработку входящих обновлений.
+
+    Raises:
+        SystemExit: Если токен бота не задан или произошла ошибка
+            при загрузке содержимого.
+    """
     load_dotenv()
     token = os.getenv("BOT_TOKEN")
     if not token:
@@ -44,6 +64,12 @@ async def main() -> None:
 
 
 def run() -> None:
+    """Настраивает логи и запускает бота.
+
+    Запускает асинхронную функцию main() в цикле событий
+    и обрабатывает штатное завершение работы по прерыванию
+    пользователем.
+    """
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",

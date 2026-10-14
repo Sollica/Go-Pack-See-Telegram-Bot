@@ -15,6 +15,16 @@ router = Router()
 
 
 async def show(callback: CallbackQuery, markdown: str, keyboard: InlineKeyboardMarkup) -> None:
+    """Обновляет сообщение с содержимым и клавиатурой.
+
+    Если исходное сообщение недоступно для редактирования,
+    завершает выполнение без изменений.
+
+    Args:
+        callback: Callback-запрос, вызвавший обновление сообщения.
+        markdown: Markdown-текст для отображения.
+        keyboard: Клавиатура, прикрепляемая к сообщению.
+    """
     if not isinstance(callback.message, Message):
         return
     await callback.message.edit_text(
@@ -25,21 +35,43 @@ async def show(callback: CallbackQuery, markdown: str, keyboard: InlineKeyboardM
 
 @router.callback_query(Nav.filter(F.action == Action.MAIN))
 async def on_main(callback: CallbackQuery) -> None:
+    """Открывает главное меню по нажатию на кнопку навигации.
+
+    Args:
+        callback: Callback-запрос от кнопки главного меню.
+    """
     await show(callback, await get_markdown(MarkdownType.MENU, "main"), main_menu_keyboard())
 
 
 @router.callback_query(Nav.filter(F.action == Action.REGION))
 async def on_region(callback: CallbackQuery, callback_data: Nav) -> None:
+    """Открывает меню выбранного региона.
+
+    Загружает содержимое меню и формирует клавиатуру
+    с действиями, доступными для выбранного региона.
+
+    Args:
+        callback: Callback-запрос от кнопки выбора региона.
+        callback_data: Данные навигации с идентификатором региона.
+    """
     await show(
         callback,
-        await get_markdown(MarkdownType.MENU,callback_data.region),
-        region_keyboard(callback_data.region)
+        await get_markdown(MarkdownType.MENU, callback_data.region),
+        region_keyboard(callback_data.region),
     )
-
 
 
 @router.callback_query(Nav.filter(F.action == Action.ABOUT))
 async def on_about(callback: CallbackQuery, callback_data: Nav) -> None:
+    """Показывает информацию о выбранном регионе.
+
+    Загружает описание региона и добавляет клавиатуру
+    для возврата к его меню.
+
+    Args:
+        callback: Callback-запрос от кнопки информации о регионе.
+        callback_data: Данные навигации с идентификатором региона.
+    """
     await show(
         callback,
         await get_markdown(MarkdownType.ABOUT_REGION, callback_data.region),
@@ -49,15 +81,36 @@ async def on_about(callback: CallbackQuery, callback_data: Nav) -> None:
 
 @router.callback_query(Nav.filter(F.action == Action.TOURS))
 async def on_tours(callback: CallbackQuery, callback_data: Nav) -> None:
+    """Открывает список экскурсий выбранного региона.
+
+    Загружает содержимое страницы экскурсий и формирует
+    клавиатуру со списком доступных маршрутов.
+
+    Args:
+        callback: Callback-запрос от кнопки перехода к экскурсиям.
+        callback_data: Данные навигации с идентификатором региона.
+    """
     await show(
         callback,
         await get_markdown(MarkdownType.MENU, "tours"),
-        tours_keyboard(callback_data.region)
+        tours_keyboard(callback_data.region),
     )
 
 
 @router.callback_query(Nav.filter(F.action == Action.TOUR), flags={"manual_answer": True})
 async def on_tour(callback: CallbackQuery, callback_data: Nav) -> None:
+    """Открывает страницу выбранной экскурсии.
+
+    Определяет текущую страницу маршрута, загружает её содержимое
+    и отображает клавиатуру для переключения между страницами.
+    Если номер страницы выходит за допустимые границы, показывает
+    пользователю уведомление с номером первой или последней страницы.
+
+    Args:
+        callback: Callback-запрос от кнопки экскурсии или пагинации.
+        callback_data: Данные навигации с идентификаторами региона,
+            экскурсии и номером страницы.
+    """
     page = callback_data.page
     tour = get_tour(callback_data.region, callback_data.tour)
     if page is None:
@@ -66,13 +119,15 @@ async def on_tour(callback: CallbackQuery, callback_data: Nav) -> None:
         await callback.answer()
         await show(
             callback,
-            await get_markdown(
-                MarkdownType.TOUR,
-                f"{callback_data.region}_{tour.slug}_{page}"
-            ), tour_pages_keyboard(callback_data.region, tour.slug, page)
+            await get_markdown(MarkdownType.TOUR, f"{callback_data.region}_{tour.slug}_{page}"),
+            tour_pages_keyboard(callback_data.region, tour.slug, page),
         )
     else:
         if page < 1:
-            await callback.answer(f"Вы находитесь на первой странице: 1/{tour.pages}", show_alert=True)
+            await callback.answer(
+                f"Вы находитесь на первой странице: 1/{tour.pages}", show_alert=True
+            )
         else:
-            await callback.answer(f"Вы находитесь на последней странице: {tour.pages}/{tour.pages}", show_alert=True)
+            await callback.answer(
+                f"Вы находитесь на последней странице: {tour.pages}/{tour.pages}", show_alert=True
+            )

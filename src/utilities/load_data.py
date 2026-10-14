@@ -6,7 +6,6 @@ from typing import Any
 
 from src.utilities.database import markdown_store, region_rows, tour_rows
 
-
 SLUG_RE = re.compile(r"[a-z0-9_]+")
 
 
@@ -36,6 +35,15 @@ class MarkdownType(StrEnum):
 
 
 def check_slug(slug: Any) -> None:
+    """Проверяет, что slug соответствует допустимому формату.
+
+    Args:
+        slug: Значение, которое нужно проверить.
+
+    Raises:
+        ValueError: Если значение не является строкой или содержит
+            недопустимые символы.
+    """
     if not isinstance(slug, str) or not SLUG_RE.fullmatch(slug):
         raise ValueError(f"Wrong slug format: {slug!r}")
 
@@ -56,20 +64,30 @@ def get_regions() -> dict[str, Region]:
     for tour in tour_rows:
         check_slug(tour["slug"])
         map_links = {int(key): link for key, link in tour["map_links"].items()}
-        tours_by_region.setdefault(tour["region_id"], []).append(Tour(
-            title=tour["title"],
-            slug=tour["slug"],
-            pages=tour["pages"],
-            map_links=map_links))
+        tours_by_region.setdefault(tour["region_id"], []).append(
+            Tour(title=tour["title"], slug=tour["slug"], pages=tour["pages"], map_links=map_links)
+        )
     regions: dict[str, Region] = {}
     for row in region_rows:
         check_slug(row["slug"])
         regions[row["slug"]] = Region(
-            row["title"], row["slug"], tuple(tours_by_region.get(row["id"], ())))
+            row["title"], row["slug"], tuple(tours_by_region.get(row["id"], ()))
+        )
     return regions
 
 
 def get_region(slug: str | None) -> Region:
+    """Возвращает регион по его slug.
+
+    Args:
+        slug: Уникальный идентификатор региона.
+
+    Returns:
+        Найденный регион.
+
+    Raises:
+        UnknownResourceError: Если регион не найден или slug не указан.
+    """
     region = get_regions().get(slug) if slug else None
     if region is None:
         raise UnknownResourceError(f"Unknown region: {slug!r}")
@@ -77,6 +95,18 @@ def get_region(slug: str | None) -> Region:
 
 
 def get_tour(region_slug: str | None, tour_slug: str | None) -> Tour:
+    """Находит маршрут в указанном регионе.
+
+    Args:
+        region_slug: Slug региона, которому принадлежит маршрут.
+        tour_slug: Slug маршрута.
+
+    Returns:
+        Найденный маршрут.
+
+    Raises:
+        UnknownResourceError: Если регион или маршрут не найдены.
+    """
     for tour in get_region(region_slug).tours:
         if tour.slug == tour_slug:
             return tour
@@ -84,11 +114,35 @@ def get_tour(region_slug: str | None, tour_slug: str | None) -> Tour:
 
 
 def get_tour_page_link(region_slug: str | None, tour_slug: str | None, page: int) -> str | None:
+    """Возвращает ссылку на карту для указанной страницы маршрута.
+
+    Args:
+        region_slug: Slug региона.
+        tour_slug: Slug маршрута.
+        page: Номер страницы маршрута.
+
+    Returns:
+        URL карты или None, если для страницы ссылка не задана.
+
+    Raises:
+        UnknownResourceError: Если регион или маршрут не найдены.
+    """
     tour = get_tour(region_slug, tour_slug)
     return tour.map_links.get(page)
 
 
 def add_back_to_top_link(markdown: str, threshold: int) -> str:
+    """Добавляет ссылку для возврата к началу длинной страницы.
+
+    Args:
+        markdown: Исходный текст в формате Markdown.
+        threshold: Минимальная длина текста, при превышении которой
+            добавляется ссылка.
+
+    Returns:
+        Исходный текст со ссылкой в начале и конце либо без изменений,
+        если его длина не превышает threshold.
+    """
     if len(markdown) > threshold:
         return '<a name="page-top"></a>\n' + markdown + "\n<br><br>[К началу страницы](#page-top)"
     return markdown
@@ -114,6 +168,23 @@ async def read_markdown(folder: str, name: str) -> str:
 
 
 async def get_markdown(menu_type: MarkdownType, menu_name: str | None) -> str:
+    """Возвращает Markdown-текст нужного раздела.
+
+    Формирует имя файла в зависимости от типа контента и передаёт
+    его в read_markdown для получения текста.
+
+    Args:
+        menu_type: Тип контента: главное меню, описание региона
+            или страница маршрута.
+        menu_name: Название или slug региона, маршрута либо меню.
+
+    Returns:
+        Текст страницы в формате Markdown.
+
+    Raises:
+        UnknownResourceError: Если страница с указанным именем
+            отсутствует в базе или тип контента не поддерживается.
+    """
     match menu_type:
         case MarkdownType.MENU:
             return await read_markdown("menus", f"{menu_name}_menu")
