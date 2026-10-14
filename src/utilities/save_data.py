@@ -1,6 +1,6 @@
 import logging
 
-from src.utilities.database import insert_row
+from utilities.database import insert_row
 
 logger = logging.getLogger(__name__)
 

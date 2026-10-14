@@ -22,7 +22,7 @@ from aiogram.types import (
     TelegramObject,
 )
 
-from src.utilities.database import image_store
+from utilities.database import image_store
 
 logger = logging.getLogger(__name__)
 

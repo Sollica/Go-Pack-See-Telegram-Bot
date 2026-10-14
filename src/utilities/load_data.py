@@ -4,7 +4,8 @@ from enum import StrEnum
 from functools import lru_cache
 from typing import Any
 
-from src.utilities.database import markdown_store, region_rows, tour_rows
+from utilities.database import markdown_store, region_rows, tour_rows
+
 
 SLUG_RE = re.compile(r"[a-z0-9_]+")
 
@@ -64,15 +65,16 @@ def get_regions() -> dict[str, Region]:
     for tour in tour_rows:
         check_slug(tour["slug"])
         map_links = {int(key): link for key, link in tour["map_links"].items()}
-        tours_by_region.setdefault(tour["region_id"], []).append(
-            Tour(title=tour["title"], slug=tour["slug"], pages=tour["pages"], map_links=map_links)
-        )
+        tours_by_region.setdefault(tour["region_id"], []).append(Tour(
+            title=tour["title"],
+            slug=tour["slug"],
+            pages=tour["pages"],
+            map_links=map_links))
     regions: dict[str, Region] = {}
     for row in region_rows:
         check_slug(row["slug"])
         regions[row["slug"]] = Region(
-            row["title"], row["slug"], tuple(tours_by_region.get(row["id"], ()))
-        )
+            row["title"], row["slug"], tuple(tours_by_region.get(row["id"], ())))
     return regions
 
 

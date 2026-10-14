@@ -1,5 +1,4 @@
 """Работа с Supabase: загрузка контента при старте и запись отзывов пользователей."""
-
 import asyncio
 import logging
 import os
