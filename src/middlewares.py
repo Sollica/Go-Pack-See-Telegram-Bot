@@ -28,12 +28,29 @@ logger = logging.getLogger(__name__)
 
 
 class AnswerCallbackMiddleware(BaseMiddleware):
+    """Автоматически подтверждает callback-запросы Telegram.
+
+    Если обработчик не помечен флагом manual_answer, отправляет
+    пустой ответ на callback до выполнения самого обработчика.
+    Ошибки Telegram API при подтверждении игнорируются.
+    """
+
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
+        """Подтверждает callback-запрос и передаёт событие обработчику.
+
+        Args:
+            handler(Callable): Следующий обработчик события.
+            event(TelegramObject): Обрабатываемое событие Telegram.
+            data(dict[str, Any]): Данные, передаваемые между middleware и обработчиками.
+
+        Returns:
+            Any: Результат выполнения обработчика.
+        """
         if isinstance(event, CallbackQuery) and not get_flag(data, "manual_answer"):
             with suppress(TelegramAPIError):
                 await event.answer()
@@ -63,12 +80,12 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         """Заменяет локальные картинки в исходящем запросе и запоминает их file_id.
 
         Args:
-            make_request: Следующий обработчик запроса.
-            bot: Экземпляр бота.
-            method: Отправляемый метод Telegram API.
+            make_request(NextRequestMiddlewareType[TelegramType]): Следующий обработчик запроса.
+            bot(Bot): Экземпляр бота.
+            method(TelegramMethod[TelegramType]): Отправляемый метод Telegram API.
 
         Returns:
-            Результат запроса (сообщение).
+            TelegramType: Результат запроса (сообщение).
 
         Raises:
             FileNotFoundError: Если указанной картинки нет в хранилище.
@@ -86,6 +103,7 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         media: list[InputRichMessageMedia] = []
 
         def replace(match: re.Match[str]) -> str:
+            """Заменяет локальную ссылку на изображение ссылкой Telegram."""
             caption, filename = match.groups()
             if "*" in filename:
                 candidates = sorted(name for name in image_store if fnmatch(name, filename))
@@ -114,14 +132,16 @@ class LocalImagesMiddleware(BaseRequestMiddleware):
         картинка просто загрузится заново в следующий раз.
 
         Args:
-            result: Результат запроса (обычно отправленное или изменённое сообщение).
-            filenames: Имена локальных файлов в порядке появления в сообщении.
+            result(Any): Результат запроса (обычно отправленное или изменённое сообщение).
+            filenames(list[str]): Имена локальных файлов в порядке появления в сообщении.
         """
         message = getattr(result, "result", result)
         if not isinstance(message, Message) or message.rich_message is None:
             return
         try:
-            photos = [block for block in message.rich_message.blocks if isinstance(block, RichBlockPhoto)]
+            photos = [
+                block for block in message.rich_message.blocks if isinstance(block, RichBlockPhoto)
+            ]
             if len(photos) != len(filenames):
                 return
             for filename, block in zip(filenames, photos):

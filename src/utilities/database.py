@@ -35,7 +35,7 @@ async def get_client() -> AsyncClient:
     """Возвращает общий асинхронный клиент Supabase, создавая его при первом вызове.
 
     Returns:
-        Клиент Supabase.
+        AsyncClient: Клиент Supabase.
 
     Raises:
         ContentLoadError: Если в окружении нет SUPABASE_URL или SUPABASE_KEY.
@@ -95,7 +95,10 @@ async def load_content() -> None:
     image_store.update({item["path"]: item["signedURL"] for item in signed if item["signedURL"]})
     logger.info(
         "Loaded %d regions, %d tours, %d markdown pages and %d images",
-        len(region_rows), len(tour_rows), len(markdown_store), len(image_store),
+        len(region_rows),
+        len(tour_rows),
+        len(markdown_store),
+        len(image_store),
     )
 
 
